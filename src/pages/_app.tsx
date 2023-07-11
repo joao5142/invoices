@@ -5,13 +5,13 @@ import { Aside } from "@/components/layouts/Aside";
 import { AnimatePresence } from "framer-motion";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <ToggleThemeProvider>
-      <Aside />
-      <AnimatePresence>
-        <Component {...pageProps} />
-      </AnimatePresence>
-      <GlobalStyles />
-    </ToggleThemeProvider>
-  );
+	return (
+		<ToggleThemeProvider>
+			<Aside />
+			<AnimatePresence mode="wait">
+				<Component {...pageProps} />
+			</AnimatePresence>
+			<GlobalStyles />
+		</ToggleThemeProvider>
+	);
 }

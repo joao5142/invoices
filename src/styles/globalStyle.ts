@@ -18,9 +18,17 @@ export const GlobalStyles = createGlobalStyle`
 `;
 
 export const ButtonContainer = styled.button`
-  border-radius: 10rem;
-  padding: 1rem 1.5rem;
+	border-radius: 10rem;
+	padding: 1rem 1.5rem;
 
-  border: 0;
-  outline: 0;
+	border: 0;
+	outline: 0;
+`;
+export const Card = styled.div`
+	background: ${(props) => props.theme.color.invoiceItem.bg};
+
+	border-radius: 8px;
+
+	padding: 1rem 1.5rem;
+	margin-top: 1rem;
 `;
