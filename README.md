@@ -22,9 +22,9 @@
 </div>
 
 <h2>🖼️ Demonstração da aplicação</h2>
-<img margin-bottom="20px" src="/public/assets/readme1.PNG">
-<img margin-bottom="20px" src="/public/assets/readme2.PNG">
-<img margin-bottom="20px" src="/public/assets/readme3.PNG">
+<img margin-bottom="20px" src="/public/assets/readme1.png">
+<img margin-bottom="20px" src="/public/assets/readme2.png">
+<img margin-bottom="20px" src="/public/assets/readme3.png">
 
 <div>
 	<h4  style="display: inline_block">Visualização do site :</h4>
