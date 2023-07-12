@@ -26,6 +26,8 @@ import arrowLeftIcon from "@/assets/images/icon-arrow-left.svg";
 import { useRouter } from "next/router";
 import { StatusButton } from "@/components/ui/StatusButton";
 import { Button } from "../../components/ui/Button/index";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/axios";
 
 
 const pageVariants = {
@@ -42,9 +44,38 @@ const pageVariants = {
 		x: 1000,
 	},
 };
-export default function InvoiceItem() {
-	const router = useRouter();
+interface IInvoicesData{
+	data: IInvoice[],
+}
+interface IInvoice{
+	id: number;
+	price: number;
+	name: string;
+	created_at: string;
+	// status: StatusType;
+}
+export default function InvoiceItem(
+	{ selectedInvoiceId }: { selectedInvoiceId: number | null }
+) {
+	const [invoiceData, setInvoiceData] = useState<IInvoice | null>(null);
 
+
+	const router = useRouter();
+	const fetchInvoiceData = async () => {
+		try {
+			const response = await api.get(`/invoices/${selectedInvoiceId}`);
+			const data = response.data;
+			setInvoiceData(data.invoice);
+		} catch (error) {
+			console.error("Erro ao buscar os dados do invoice:", error);
+		}
+	};
+	useEffect(() => {
+
+		if (selectedInvoiceId) {
+			fetchInvoiceData();
+		}
+	}, [selectedInvoiceId]);
 	function handleGoBack() {
 		router.back();
 	}
