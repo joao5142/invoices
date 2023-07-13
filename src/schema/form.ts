@@ -56,3 +56,5 @@ export const validationSchema = Yup.object().shape({
     )
     .min(1, "- An item must be added."),
 });
+
+export type FormSchemaType = typeof validationSchema;

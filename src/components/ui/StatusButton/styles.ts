@@ -25,11 +25,11 @@ function getCssButtonByStatus(status: StatusType) {
 
     case "Draft":
       return css`
-        background: rgba(55, 59, 83, 0.06);
-        color: rgb(55, 59, 83);
+        background: ${(props) => props.theme.color.invoiceStatus.bg};
+        color: ${(props) => props.theme.color.invoiceStatus.text};
 
         strong::before {
-          background: rgb(55, 59, 83);
+          background: ${(props) => props.theme.color.invoiceStatus.text};
         }
       `;
 

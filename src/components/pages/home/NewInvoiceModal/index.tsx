@@ -46,11 +46,15 @@ export function NewInvoiceModal({ onClose }: NewInvoiceModalProps) {
         >
           <Content>
             <h2>Create Invoice</h2>
-            <Form />
+            <Form id="form-data" />
             <ButtonsContainer>
-              <Button variant="quaternary">Discard</Button>
+              <Button variant="quaternary" onClick={() => onClose()}>
+                Discard
+              </Button>
               <Button variant="tertiary">Save as Draft</Button>
-              <Button variant="primary">Save & Send</Button>
+              <Button form="form-data" variant="primary">
+                Save & Send
+              </Button>
             </ButtonsContainer>
           </Content>
         </NewInvoiceModalContent>

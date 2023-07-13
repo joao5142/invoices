@@ -13,6 +13,7 @@ import iconCheck from "@/assets/images/icon-check.svg";
 
 export function Filter() {
   const [isOpen, setIsOpen] = useState(false);
+  const [checkedCheckboxs, setCheckedCheckboxs] = useState([]);
 
   function handleToggleIcon() {
     setIsOpen(!isOpen);
