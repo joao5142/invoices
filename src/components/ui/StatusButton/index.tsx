@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { StatusButtonContainer } from "./styles";
 
-export type StatusType = "paid" | "pending" | "draft";
+export type StatusType = "Paid" | "Pending" | "Draft";
 export interface IButton {
   status: StatusType;
 }

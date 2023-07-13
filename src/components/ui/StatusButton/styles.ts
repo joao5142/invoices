@@ -3,7 +3,7 @@ import { IButton, StatusType } from ".";
 
 function getCssButtonByStatus(status: StatusType) {
   switch (status) {
-    case "paid":
+    case "Paid":
       return css`
         background: rgba(51, 214, 159, 0.06);
         color: rgb(51, 214, 159);
@@ -13,7 +13,7 @@ function getCssButtonByStatus(status: StatusType) {
         }
       `;
 
-    case "pending":
+    case "Pending":
       return css`
         background: rgba(255, 143, 0, 0.06);
         color: rgb(255, 143, 0);
@@ -23,7 +23,7 @@ function getCssButtonByStatus(status: StatusType) {
         }
       `;
 
-    case "draft":
+    case "Draft":
       return css`
         background: rgba(55, 59, 83, 0.06);
         color: rgb(55, 59, 83);

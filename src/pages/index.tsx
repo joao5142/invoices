@@ -1,7 +1,7 @@
 import { Main } from "@/components/layouts/Main";
 import { Aside } from "../components/layouts/Aside/index";
 import Image from "next/image";
-import { StatusButton } from "@/components/ui/StatusButton";
+import { StatusButton, StatusType } from "@/components/ui/StatusButton";
 import { ButtonNewInvoice, Content, Header, InvoiceItem, InvoiceItemsContainer } from "@/styles/pages/home/styles";
 
 import iconPlusImg from "@/assets/images/icon-plus.svg";
@@ -10,9 +10,10 @@ import { Filter } from "@/components/pages/home/Filter";
 
 import iconArrowRightImg from "@/assets/images/icon-arrow-right.svg";
 import { NewInvoiceModal } from "@/components/pages/home/NewInvoiceModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
+import { api } from "@/lib/axios";
 
 const pageVariants = {
 	initial: {
@@ -28,15 +29,39 @@ const pageVariants = {
 		x: 1000,
 	},
 };
+// interface IInvoicesData{
+// 	data: IInvoice[],
+// }
+interface IInvoices{
+	id: number;
+	price: number;
+	name: string;
+	created_at: string;
+	status: StatusType;
+}
 
 export default function Home() {
 	const [isNewInvoiceModalOpen, setIsNewInvoiceModalOpen] = useState(false);
+	const [invoices, setInvoices] = useState<IInvoices[]>([]);
 
 	const router = useRouter();
 
-	function handleNavigateInvoiceItem() {
-		router.push("/invoice/1");
+	function handleNavigateInvoiceItem(invoiceId: number) {
+		router.push(`/invoice/${invoiceId}`);
 	}
+	async function fetchInvoices() {
+		try {
+			const response = await api.get("/invoices");
+			const data = response.data;
+			setInvoices(data.invoices);
+		} catch (error) {
+			console.error("Erro ao buscar os invoices:", error);
+		}
+	}
+
+	useEffect(() => {
+		fetchInvoices();
+	}, []);
 	return (
 		<>
 			<Main
@@ -67,16 +92,18 @@ export default function Home() {
 					</Header>
 
 					<InvoiceItemsContainer>
-						<InvoiceItem onClick={handleNavigateInvoiceItem}>
+						{invoices.map((invoice) => (
+							<InvoiceItem  key={invoice.id} onClick={() => handleNavigateInvoiceItem(invoice.id)}>
 							<span>
-								#<strong>Rt3080</strong>
+								#<strong>{invoice.id}</strong>
 							</span>
-							<span>Due 19 aug 2023</span>
-							<span>Jesen huang</span>
-							<strong>£1,800.9</strong>
-							<StatusButton status="paid" />
+							<span>{invoice.created_at}</span>
+							<span>{invoice.author.name}</span>
+							<strong>R$ {invoice.total}</strong>
+							<StatusButton status={invoice.status} />
 							<Image width={10} src={iconArrowRightImg} alt="" />
 						</InvoiceItem>
+							))}
 					</InvoiceItemsContainer>
 				</Content>
 				<AnimatePresence>
