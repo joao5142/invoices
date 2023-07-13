@@ -29,10 +29,10 @@ const pageVariants = {
 		x: 1000,
 	},
 };
-interface IInvoicesData{
-	data: IInvoice[],
-}
-interface IInvoice{
+// interface IInvoicesData{
+// 	data: IInvoice[],
+// }
+interface IInvoices{
 	id: number;
 	price: number;
 	name: string;
@@ -42,13 +42,11 @@ interface IInvoice{
 
 export default function Home() {
 	const [isNewInvoiceModalOpen, setIsNewInvoiceModalOpen] = useState(false);
-	const [invoices, setInvoices] = useState<IInvoicesData>({data:[]});
-	const [selectedInvoiceId, setSelectedInvoiceId] = useState<number | null>(null);
+	const [invoices, setInvoices] = useState<IInvoices[]>([]);
 
 	const router = useRouter();
 
 	function handleNavigateInvoiceItem(invoiceId: number) {
-		setSelectedInvoiceId(invoiceId);
 		router.push(`/invoice/${invoiceId}`);
 	}
 	async function fetchInvoices() {
@@ -94,14 +92,14 @@ export default function Home() {
 					</Header>
 
 					<InvoiceItemsContainer>
-						{invoices.data.map((invoice) => (
+						{invoices.map((invoice) => (
 							<InvoiceItem  key={invoice.id} onClick={() => handleNavigateInvoiceItem(invoice.id)}>
 							<span>
 								#<strong>{invoice.id}</strong>
 							</span>
 							<span>{invoice.created_at}</span>
-							<span>{invoice.name}</span>
-							<strong>{invoice.price}</strong>
+							<span>{invoice.author.name}</span>
+							<strong>R$ {invoice.total}</strong>
 							<StatusButton status={invoice.status} />
 							<Image width={10} src={iconArrowRightImg} alt="" />
 						</InvoiceItem>
