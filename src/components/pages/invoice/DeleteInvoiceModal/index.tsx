@@ -7,6 +7,8 @@ import {
 import { createPortal } from "react-dom";
 import { api } from "@/lib/axios";
 
+import { useRouter } from "next/router";
+
 interface DeleteInvoiceModalProps {
   onClose: () => void;
   invoiceId: number;
@@ -15,10 +17,15 @@ export function DeleteInvoiceModal({
   onClose,
   invoiceId,
 }: DeleteInvoiceModalProps) {
+  const router = useRouter();
+
   async function handleDeleteInvoice() {
     try {
       const response = await api.delete(`/invoices/${invoiceId}`);
-    } catch (err) {}
+      router.replace("/");
+    } catch (err) {
+      console.error(err);
+    }
   }
   return createPortal(
     <DeleteModalContainer>

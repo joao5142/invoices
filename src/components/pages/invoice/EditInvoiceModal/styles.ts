@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { styled } from "styled-components";
 
-export const NewInvoiceModalContainer = styled(motion.div)`
+export const EditInvoiceModalContainer = styled(motion.div)`
   position: fixed;
   left: 0;
   top: 0;
@@ -9,7 +9,7 @@ export const NewInvoiceModalContainer = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-export const NewInvoiceModalContent = styled(motion.div)`
+export const EditInvoiceModalContent = styled(motion.div)`
   z-index: 1;
 
   height: 100vh;

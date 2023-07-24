@@ -1,19 +1,20 @@
 import { createPortal } from "react-dom";
 import {
-  NewInvoiceModalContainer,
-  NewInvoiceModalContent,
+  EditInvoiceModalContainer,
+  EditInvoiceModalContent,
   Content,
   ButtonsContainer,
 } from "./styles";
 import { AnimatePresence } from "framer-motion";
 import { Form } from "@/components/partials/Form";
 import { Button } from "@/components/ui/Button";
-import { validationSchema } from "@/schema/form";
+import { FormSchemaType, validationSchema } from "@/schema/form";
 import { api } from "@/lib/axios";
 
-interface NewInvoiceModalProps {
+interface EditInvoiceModalProps {
   onClose: () => void;
   onSaveData: () => void;
+  invoiceData: FormSchemaType;
 }
 
 const animation = {
@@ -27,16 +28,20 @@ const animation = {
   },
 };
 
-export function NewInvoiceModal({ onClose, onSaveData }: NewInvoiceModalProps) {
+export function EditInvoiceModal({
+  onClose,
+  onSaveData,
+  invoiceData,
+}: EditInvoiceModalProps) {
   function handleCloseModal(event: Event) {
     if (event.currentTarget == event.target) {
       onClose();
     }
   }
 
-  async function handleSaveData(data: typeof validationSchema) {
+  async function handleSaveData(data: FormSchemaType) {
     try {
-      const response = await api.post("/invoices", data);
+      const response = await api.put("/invoices", data);
       onSaveData();
       onClose();
     } catch (err) {
@@ -46,32 +51,36 @@ export function NewInvoiceModal({ onClose, onSaveData }: NewInvoiceModalProps) {
 
   return (
     <>
-      <NewInvoiceModalContainer
+      <EditInvoiceModalContainer
         onClick={handleCloseModal}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <NewInvoiceModalContent
+        <EditInvoiceModalContent
           variants={animation}
           initial="hidden"
           animate="visible"
           exit="hidden"
         >
           <Content>
-            <h2>Create Invoice</h2>
-            <Form id="form-data" onSaveData={handleSaveData} />
+            <h2>Edit Invoice</h2>
+            <Form
+              initialData={invoiceData}
+              id="form-data"
+              onSaveData={handleSaveData}
+            />
             <ButtonsContainer>
               <Button variant="quaternary" onClick={() => onClose()}>
                 Discard
               </Button>
               <Button form="form-data" variant="primary">
-                Save
+                Update
               </Button>
             </ButtonsContainer>
           </Content>
-        </NewInvoiceModalContent>
-      </NewInvoiceModalContainer>
+        </EditInvoiceModalContent>
+      </EditInvoiceModalContainer>
     </>
   );
 }

@@ -19,11 +19,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useForm, useFieldArray } from "react-hook-form";
 
-import { validationSchema } from "@/schema/form";
+import { FormSchemaType, validationSchema } from "@/schema/form";
 
-interface FormProps extends FormHTMLAttributes<HTMLFormElement> {}
+interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
+  onSaveData: (data: FormSchemaType) => void;
+  initialData?: FormSchemaType;
+}
 
-export function Form({ ...rest }: FormProps) {
+export function Form({ onSaveData, initialData, ...rest }: FormProps) {
   const {
     register,
     handleSubmit,
@@ -39,9 +42,9 @@ export function Form({ ...rest }: FormProps) {
     name: "items",
   });
 
-  function handleSaveFormData(data: typeof validationSchema) {
+  function handleSaveFormData(data: FormSchemaType) {
     try {
-      console.log(data);
+      onSaveData(data);
     } catch (err) {}
   }
 

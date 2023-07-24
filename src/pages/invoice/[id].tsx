@@ -25,6 +25,8 @@ import { Button } from "../../components/ui/Button/index";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/axios";
 import { DeleteInvoiceModal } from "@/components/pages/invoice/DeleteInvoiceModal";
+import { AnimatePresence } from "framer-motion";
+import { EditInvoiceModal } from "@/components/pages/invoice/EditInvoiceModal";
 
 const pageVariants = {
   initial: {
@@ -55,15 +57,15 @@ interface IAddress {
   city: string;
   country: string;
 }
-interface IInvoiceDataFetch {
-  author: { email: string; id: number; name: string; address: IAddress };
-  created_at: string;
-  description: string;
-  id: number;
-  id_client: number;
-  status: StatusType;
-  items: IIvoiceItem[];
-  totalPrice: string;
+export interface IInvoiceDataFetch {
+  author?: { email: string; id: number; name: string; address: IAddress };
+  created_at?: string;
+  description?: string;
+  id?: number;
+  id_client?: number;
+  status?: StatusType;
+  items?: IIvoiceItem[];
+  totalPrice?: string;
 }
 
 export default function InvoiceItem() {
@@ -71,8 +73,9 @@ export default function InvoiceItem() {
 
   const { id } = router.query;
 
-  const [invoice, setInvoice] = useState<IInvoiceDataFetch>();
+  const [invoice, setInvoice] = useState<IInvoiceDataFetch>({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   async function fetchInvoice() {
     try {
@@ -85,15 +88,21 @@ export default function InvoiceItem() {
     }
   }
 
-  function handleMarkInvoiceAsPaid() {
+  async function handleMarkInvoiceAsPaid() {
     try {
-      let invoiceId = invoice.id;
+      const response = await api.patch(`/invoices/mark-as-paid/${id}`);
+      setInvoice((prevState) => {
+        return { ...prevState, status: "Paid" };
+      });
     } catch (error) {
       console.error("Erro ao marcar como pago", error);
     }
   }
   function handleDeleteInvoiceItem() {
     setIsDeleteModalOpen(true);
+  }
+  function handleOpenEditInvoiceModal() {
+    setIsEditModalOpen(true);
   }
 
   function handleGoBack() {
@@ -108,6 +117,7 @@ export default function InvoiceItem() {
 
   return (
     <Main
+      data-view="invoice-item"
       initial="initial"
       animate="in"
       exit="out"
@@ -127,10 +137,15 @@ export default function InvoiceItem() {
           <InvoiceHeaderConfig>
             <div>
               <span>Status</span>
-              <StatusButton status={invoice?.status} />
+              <StatusButton status={invoice.status!} />
             </div>
             <div>
-              <Button variant="quaternary">Edit</Button>
+              <Button
+                onClick={() => handleOpenEditInvoiceModal()}
+                variant="quaternary"
+              >
+                Edit
+              </Button>
               <Button variant="quintary" onClick={handleDeleteInvoiceItem}>
                 Delete
               </Button>
@@ -196,12 +211,12 @@ export default function InvoiceItem() {
                   <span>Price </span>
                   <span>Total</span>
                 </ItemDescriptionHeader>
-                {invoice?.items.map((item) => (
+                {invoice?.items?.map((item) => (
                   <ItemDescriptionBody key={item.id}>
                     <strong>{item?.name}</strong>
                     <span>{item?.qty}</span>
-                    <span>{item?.price}</span>
-                    <strong>{item?.totalItem}</strong>
+                    <span>${item?.price}</span>
+                    <strong>${item?.totalItem}</strong>
                   </ItemDescriptionBody>
                 ))}
               </InvoiceBodyFooterContent>
@@ -209,7 +224,7 @@ export default function InvoiceItem() {
                 <InvoiceBodyFooterAmount>
                   <span>Amount Due</span>
 
-                  <strong>{invoice?.totalPrice}</strong>
+                  <strong>${invoice?.totalPrice}</strong>
                 </InvoiceBodyFooterAmount>
               </InvoiceBodyFooterContent>
             </InvoiceBodyFooter>
@@ -222,6 +237,15 @@ export default function InvoiceItem() {
           invoiceId={invoice?.id!}
         />
       )}
+      <AnimatePresence>
+        {isEditModalOpen && (
+          <EditInvoiceModal
+            onSaveData={handleGoBack}
+            onClose={() => setIsEditModalOpen(false)}
+            invoiceData={invoice}
+          />
+        )}
+      </AnimatePresence>
     </Main>
   );
 }

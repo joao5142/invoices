@@ -24,6 +24,8 @@ import { format } from "date-fns";
 
 import { api } from "@/lib/axios";
 
+import { produce } from "immer";
+
 const pageVariants = {
   initial: {
     opacity: 0,
@@ -53,8 +55,8 @@ interface IInvoices {
 
 export default function Home() {
   const [isNewInvoiceModalOpen, setIsNewInvoiceModalOpen] = useState(false);
-  const [filters, setFilters] = useState();
   const [invoices, setInvoices] = useState<IInvoices[]>([]);
+  const [filtredInvoice, setFiltredInvoices] = useState<IInvoices[]>([]);
 
   const router = useRouter();
 
@@ -66,6 +68,7 @@ export default function Home() {
       const response = await api.get("/invoices");
       const data = response.data;
       setInvoices(data.invoices);
+      setFiltredInvoices(data.invoices);
     } catch (error) {
       console.error("Erro ao buscar os invoices:", error);
     }
@@ -74,6 +77,21 @@ export default function Home() {
   useEffect(() => {
     fetchInvoices();
   }, []);
+
+  function handleFilterInvoiceItems(filters: string[]) {
+    let filtredItems: IInvoices[] = [];
+
+    if (filters.length) {
+      filtredItems = produce(invoices, (draft) => {
+        return draft.filter((invoice) => filters.includes(invoice.status));
+      });
+    } else {
+      filtredItems = produce(invoices, (draft) => {
+        return draft;
+      });
+    }
+    setFiltredInvoices(filtredItems);
+  }
 
   return (
     <>
@@ -95,7 +113,7 @@ export default function Home() {
               <span>There are {invoices.length} total invoices.</span>
             </div>
 
-            <Filter />
+            <Filter onDataChange={handleFilterInvoiceItems} />
             <ButtonNewInvoice onClick={() => setIsNewInvoiceModalOpen(true)}>
               <ButtonNewInvoiceIcon>
                 <Image src={iconPlusImg} width={10} alt="" />
@@ -105,7 +123,7 @@ export default function Home() {
           </Header>
 
           <InvoiceItemsContainer>
-            {invoices.map((invoice) => (
+            {filtredInvoice.map((invoice) => (
               <InvoiceItem
                 key={invoice.id}
                 onClick={() => handleNavigateInvoiceItem(invoice.id)}
@@ -126,7 +144,10 @@ export default function Home() {
         </Content>
         <AnimatePresence>
           {isNewInvoiceModalOpen && (
-            <NewInvoiceModal onClose={() => setIsNewInvoiceModalOpen(false)} />
+            <NewInvoiceModal
+              onSaveData={fetchInvoices}
+              onClose={() => setIsNewInvoiceModalOpen(false)}
+            />
           )}
         </AnimatePresence>
       </Main>
