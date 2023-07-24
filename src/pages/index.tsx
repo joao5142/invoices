@@ -117,7 +117,7 @@ export default function Home() {
                   {format(new Date(invoice.created_at), "'Due' dd MMM yyyy")}
                 </span>
                 <span>{invoice.author.name}</span>
-                <strong>R$ {invoice.total.toFixed(2)}</strong>
+                <strong>R$ {invoice.total}</strong>
                 <StatusButton status={invoice.status} />
                 <Image width={10} src={iconArrowRightImg} alt="" />
               </InvoiceItem>

@@ -1,8 +1,6 @@
 import { Main } from "@/components/layouts/Main";
 import {
   Card,
-  CardHeaderConfig,
-  ColumnSpansAddress,
   Content,
   HeaderNavigationBack,
   InvoiceAddress,
@@ -10,11 +8,9 @@ import {
   InvoiceBodyFooter,
   InvoiceBodyFooterAmount,
   InvoiceBodyFooterContent,
-  InvoiceColumn,
   InvoiceColumnBillTo,
   InvoiceColumnDate,
   InvoiceColumnEmail,
-  InvoiceDate,
   InvoiceHeaderConfig,
   InvoiceName,
   ItemDescriptionBody,
@@ -28,6 +24,7 @@ import { StatusButton, StatusType } from "@/components/ui/StatusButton";
 import { Button } from "../../components/ui/Button/index";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/axios";
+import { DeleteInvoiceModal } from "@/components/pages/invoice/DeleteInvoiceModal";
 
 const pageVariants = {
   initial: {
@@ -75,6 +72,7 @@ export default function InvoiceItem() {
   const { id } = router.query;
 
   const [invoice, setInvoice] = useState<IInvoiceDataFetch>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   async function fetchInvoice() {
     try {
@@ -93,6 +91,9 @@ export default function InvoiceItem() {
     } catch (error) {
       console.error("Erro ao marcar como pago", error);
     }
+  }
+  function handleDeleteInvoiceItem() {
+    setIsDeleteModalOpen(true);
   }
 
   function handleGoBack() {
@@ -130,7 +131,9 @@ export default function InvoiceItem() {
             </div>
             <div>
               <Button variant="quaternary">Edit</Button>
-              <Button variant="quintary">Delete</Button>
+              <Button variant="quintary" onClick={handleDeleteInvoiceItem}>
+                Delete
+              </Button>
               {(invoice?.status == "Pending" || invoice?.status == "Draft") && (
                 <Button
                   onClick={() => handleMarkInvoiceAsPaid()}
@@ -213,6 +216,12 @@ export default function InvoiceItem() {
           </InvoiceBody>
         </Card>
       </Content>
+      {isDeleteModalOpen && (
+        <DeleteInvoiceModal
+          onClose={() => setIsDeleteModalOpen(false)}
+          invoiceId={invoice?.id!}
+        />
+      )}
     </Main>
   );
 }
