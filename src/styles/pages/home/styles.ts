@@ -73,7 +73,7 @@ export const InvoiceItem = styled(Card)`
 
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 2fr 2fr 1.3fr 1.5fr 0.625rem;
+  grid-template-columns: 0.4fr 1.5fr 2fr 1.5fr 1.5fr 0.625rem;
 
   cursor: pointer;
 
