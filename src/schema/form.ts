@@ -58,3 +58,31 @@ export const validationSchema = Yup.object().shape({
 });
 
 export type FormSchemaType = typeof validationSchema;
+
+interface IInvoiceItem {
+  id?: number;
+  price: number;
+  quantity: number;
+  name: string;
+  totalItem?: number;
+}
+export interface IInvoiceSchema {
+  senderAddress: {
+    street: string;
+    city: string;
+    postCode: string;
+    country: string;
+  };
+  clientName: string;
+  clientEmail: string;
+  clientAddress: {
+    street: string;
+    city: string;
+    postCode: string;
+    country: string;
+  };
+  createdAt: Date;
+  paymentTerms: "1" | "7" | "14" | "30";
+  description: string;
+  items: IInvoiceItem[];
+}

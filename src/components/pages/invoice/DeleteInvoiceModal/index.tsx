@@ -11,13 +11,11 @@ import { useRouter } from "next/router";
 
 interface DeleteInvoiceModalProps {
   onClose: () => void;
-  invoiceId: number;
 }
-export function DeleteInvoiceModal({
-  onClose,
-  invoiceId,
-}: DeleteInvoiceModalProps) {
+export function DeleteInvoiceModal({ onClose }: DeleteInvoiceModalProps) {
   const router = useRouter();
+
+  const { id: invoiceId } = router.query;
 
   async function handleDeleteInvoice() {
     try {

@@ -27,7 +27,7 @@ import { api } from "@/lib/axios";
 import { DeleteInvoiceModal } from "@/components/pages/invoice/DeleteInvoiceModal";
 import { AnimatePresence } from "framer-motion";
 import { EditInvoiceModal } from "@/components/pages/invoice/EditInvoiceModal";
-import { FormSchemaType } from "@/schema/form";
+import { FormSchemaType, IInvoiceSchema } from "@/schema/form";
 
 const pageVariants = {
   initial: {
@@ -44,7 +44,7 @@ const pageVariants = {
   },
 };
 
-export interface IInvoiceDataFetch extends Partial<FormSchemaType> {
+export interface IInvoiceDataFetch extends Partial<IInvoiceSchema> {
   status?: StatusType;
 }
 
@@ -196,7 +196,7 @@ export default function InvoiceItem() {
                   <span>Total</span>
                 </ItemDescriptionHeader>
                 {invoice?.items?.map((item) => (
-                  <ItemDescriptionBody key={item.id}>
+                  <ItemDescriptionBody key={item?.id}>
                     <strong>{item?.name}</strong>
                     <span>{item?.quantity}</span>
                     <span>${item?.price}</span>
@@ -216,17 +216,14 @@ export default function InvoiceItem() {
         </Card>
       </Content>
       {isDeleteModalOpen && (
-        <DeleteInvoiceModal
-          onClose={() => setIsDeleteModalOpen(false)}
-          invoiceId={id}
-        />
+        <DeleteInvoiceModal onClose={() => setIsDeleteModalOpen(false)} />
       )}
       <AnimatePresence>
         {isEditModalOpen && (
           <EditInvoiceModal
             onSaveData={handleGoBack}
             onClose={() => setIsEditModalOpen(false)}
-            invoiceData={invoice}
+            invoiceData={invoice as IInvoiceSchema}
           />
         )}
       </AnimatePresence>

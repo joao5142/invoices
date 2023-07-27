@@ -8,14 +8,19 @@ import {
 import { AnimatePresence } from "framer-motion";
 import { Form } from "@/components/partials/Form";
 import { Button } from "@/components/ui/Button";
-import { FormSchemaType, validationSchema } from "@/schema/form";
+import {
+  FormSchemaType,
+  IInvoiceSchema,
+  validationSchema,
+} from "@/schema/form";
 import { api } from "@/lib/axios";
 import { useRouter } from "next/router";
+import { MouseEvent } from "react";
 
 interface EditInvoiceModalProps {
   onClose: () => void;
   onSaveData: () => void;
-  invoiceData: FormSchemaType;
+  invoiceData: IInvoiceSchema;
 }
 
 const animation = {
@@ -38,13 +43,13 @@ export function EditInvoiceModal({
 
   const { id } = router.query;
 
-  function handleCloseModal(event: Event) {
+  function handleCloseModal(event: MouseEvent<HTMLDivElement>) {
     if (event.currentTarget == event.target) {
       onClose();
     }
   }
 
-  async function handleSaveData(data: FormSchemaType) {
+  async function handleSaveData(data: IInvoiceSchema) {
     try {
       const response = await api.put("/invoices/" + id, data);
       onSaveData();
