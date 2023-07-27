@@ -10,6 +10,7 @@ import { Form } from "@/components/partials/Form";
 import { Button } from "@/components/ui/Button";
 import { FormSchemaType, validationSchema } from "@/schema/form";
 import { api } from "@/lib/axios";
+import { useRouter } from "next/router";
 
 interface EditInvoiceModalProps {
   onClose: () => void;
@@ -33,6 +34,10 @@ export function EditInvoiceModal({
   onSaveData,
   invoiceData,
 }: EditInvoiceModalProps) {
+  const router = useRouter();
+
+  const { id } = router.query;
+
   function handleCloseModal(event: Event) {
     if (event.currentTarget == event.target) {
       onClose();
@@ -41,9 +46,9 @@ export function EditInvoiceModal({
 
   async function handleSaveData(data: FormSchemaType) {
     try {
-      const response = await api.put("/invoices", data);
+      const response = await api.put("/invoices/" + id, data);
       onSaveData();
-      onClose();
+      // onClose();
     } catch (err) {
       console.error(err);
     }

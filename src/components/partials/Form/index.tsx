@@ -35,6 +35,7 @@ export function Form({ onSaveData, initialData, ...rest }: FormProps) {
     watch,
   } = useForm({
     resolver: yupResolver(validationSchema),
+    defaultValues: initialData,
   });
 
   const { fields, append, remove } = useFieldArray({

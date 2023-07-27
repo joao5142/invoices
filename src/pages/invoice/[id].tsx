@@ -27,6 +27,7 @@ import { api } from "@/lib/axios";
 import { DeleteInvoiceModal } from "@/components/pages/invoice/DeleteInvoiceModal";
 import { AnimatePresence } from "framer-motion";
 import { EditInvoiceModal } from "@/components/pages/invoice/EditInvoiceModal";
+import { FormSchemaType } from "@/schema/form";
 
 const pageVariants = {
   initial: {
@@ -42,30 +43,9 @@ const pageVariants = {
     x: 1000,
   },
 };
-interface IIvoiceItem {
-  id: number;
-  created_at: string;
-  deleted_at: string;
-  id_invoice: number;
-  name: string;
-  price: number;
-  qty: number;
-  totalItem: number;
-}
-interface IAddress {
-  street: string;
-  city: string;
-  country: string;
-}
-export interface IInvoiceDataFetch {
-  author?: { email: string; id: number; name: string; address: IAddress };
-  created_at?: string;
-  description?: string;
-  id?: number;
-  id_client?: number;
+
+export interface IInvoiceDataFetch extends Partial<FormSchemaType> {
   status?: StatusType;
-  items?: IIvoiceItem[];
-  totalPrice?: string;
 }
 
 export default function InvoiceItem() {
@@ -76,6 +56,10 @@ export default function InvoiceItem() {
   const [invoice, setInvoice] = useState<IInvoiceDataFetch>({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const invoiceTotalPrice = invoice?.items?.reduce((acc, invoice) => {
+    return invoice.quantity * invoice.price + acc;
+  }, 0);
 
   async function fetchInvoice() {
     try {
@@ -165,14 +149,14 @@ export default function InvoiceItem() {
           <InvoiceBody>
             <InvoiceName>
               <span>
-                #<strong>{invoice?.id}</strong>
+                #<strong>{id}</strong>
               </span>
               <span>Re-branding</span>
             </InvoiceName>
             <InvoiceAddress>
-              <span>{invoice?.author?.address?.street}</span>
-              <span>{invoice?.author?.address?.city}</span>
-              <span>{invoice?.author?.address?.country}</span>
+              <span>{invoice?.senderAddress?.street}</span>
+              <span>{invoice?.senderAddress?.city}</span>
+              <span>{invoice?.senderAddress?.country}</span>
             </InvoiceAddress>
 
             <InvoiceColumnDate>
@@ -187,18 +171,18 @@ export default function InvoiceItem() {
             </InvoiceColumnDate>
             <InvoiceColumnBillTo>
               <span>Bill To</span>
-              <strong>{invoice?.author?.name}</strong>
+              <strong>{invoice?.clientName}</strong>
               <div>
-                <span>{invoice?.author?.address?.street}</span>
-                <span>{invoice?.author?.address?.city}</span>
-                <span>{invoice?.author?.address?.country}</span>
+                <span>{invoice?.clientAddress?.street}</span>
+                <span>{invoice?.clientAddress?.city}</span>
+                <span>{invoice?.clientAddress?.country}</span>
               </div>
             </InvoiceColumnBillTo>
             <InvoiceColumnEmail>
               <span>Sent to</span>
               <strong>
                 <a href="mailto:{invoice?.author.email}">
-                  {invoice?.author?.email}
+                  {invoice?.clientEmail}
                 </a>
               </strong>
             </InvoiceColumnEmail>
@@ -214,7 +198,7 @@ export default function InvoiceItem() {
                 {invoice?.items?.map((item) => (
                   <ItemDescriptionBody key={item.id}>
                     <strong>{item?.name}</strong>
-                    <span>{item?.qty}</span>
+                    <span>{item?.quantity}</span>
                     <span>${item?.price}</span>
                     <strong>${item?.totalItem}</strong>
                   </ItemDescriptionBody>
@@ -224,7 +208,7 @@ export default function InvoiceItem() {
                 <InvoiceBodyFooterAmount>
                   <span>Amount Due</span>
 
-                  <strong>${invoice?.totalPrice}</strong>
+                  <strong>${invoiceTotalPrice?.toFixed(2)}</strong>
                 </InvoiceBodyFooterAmount>
               </InvoiceBodyFooterContent>
             </InvoiceBodyFooter>
@@ -234,7 +218,7 @@ export default function InvoiceItem() {
       {isDeleteModalOpen && (
         <DeleteInvoiceModal
           onClose={() => setIsDeleteModalOpen(false)}
-          invoiceId={invoice?.id!}
+          invoiceId={id}
         />
       )}
       <AnimatePresence>
