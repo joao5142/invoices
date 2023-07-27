@@ -57,7 +57,7 @@ export function Form({ onSaveData, initialData, ...rest }: FormProps) {
     };
   });
 
-  console.log(errors);
+  console.log(initialData);
   return (
     <FormContainer onSubmit={handleSubmit(handleSaveFormData)} {...rest}>
       <div>
@@ -220,7 +220,7 @@ export function Form({ onSaveData, initialData, ...rest }: FormProps) {
             </label>
             <label>
               <span>Total</span>
-              <span>{item.price * item.quantity}</span>
+              <span>{Number(item.price * item.quantity).toFixed(2)}</span>
             </label>
             <label>
               <span> </span>

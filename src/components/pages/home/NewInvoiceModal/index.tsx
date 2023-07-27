@@ -10,6 +10,7 @@ import { Form } from "@/components/partials/Form";
 import { Button } from "@/components/ui/Button";
 import { validationSchema } from "@/schema/form";
 import { api } from "@/lib/axios";
+import { toast } from "react-toastify";
 
 interface NewInvoiceModalProps {
   onClose: () => void;
@@ -36,11 +37,18 @@ export function NewInvoiceModal({ onClose, onSaveData }: NewInvoiceModalProps) {
 
   async function handleSaveData(data: typeof validationSchema) {
     try {
-      const response = await api.post("/invoices", data);
-
-      console.log("save");
-      onSaveData();
-      // onClose();
+      const {
+        data: { success, message },
+      } = await api.post("/invoices", data);
+      if (success) {
+        console.log("save");
+        toast.success(message);
+        onSaveData();
+        onClose();
+      } else {
+        console.error(message);
+        toast.error(message);
+      }
     } catch (err) {
       console.error(err);
     }

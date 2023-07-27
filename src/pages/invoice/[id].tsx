@@ -28,6 +28,7 @@ import { DeleteInvoiceModal } from "@/components/pages/invoice/DeleteInvoiceModa
 import { AnimatePresence } from "framer-motion";
 import { EditInvoiceModal } from "@/components/pages/invoice/EditInvoiceModal";
 import { FormSchemaType, IInvoiceSchema } from "@/schema/form";
+import { addDaysToDate, formatDate } from "@/utils/date";
 
 const pageVariants = {
   initial: {
@@ -162,11 +163,13 @@ export default function InvoiceItem() {
             <InvoiceColumnDate>
               <div>
                 <span>Invoice Date</span>
-                <strong>18 Aug 2021</strong>
+                <strong>{formatDate(invoice?.createdAt!)}</strong>
               </div>
               <div>
                 <span>Payment Due</span>
-                <strong>18 Aug 2021</strong>
+                <strong>
+                  {addDaysToDate(invoice?.createdAt!, invoice?.paymentTerms!)}
+                </strong>
               </div>
             </InvoiceColumnDate>
             <InvoiceColumnBillTo>
@@ -198,9 +201,9 @@ export default function InvoiceItem() {
                 {invoice?.items?.map((item) => (
                   <ItemDescriptionBody key={item?.id}>
                     <strong>{item?.name}</strong>
-                    <span>{item?.quantity}</span>
-                    <span>${item?.price}</span>
-                    <strong>${item?.totalItem}</strong>
+                    <span>{Number(item?.quantity).toFixed(0)}</span>
+                    <span>${Number(item?.price).toFixed(2)}</span>
+                    <strong>${Number(item?.totalItem).toFixed(2)}</strong>
                   </ItemDescriptionBody>
                 ))}
               </InvoiceBodyFooterContent>

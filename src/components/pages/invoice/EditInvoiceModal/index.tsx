@@ -16,6 +16,8 @@ import {
 import { api } from "@/lib/axios";
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
+import { formatDateToUTCFormat } from "@/utils/date";
+import { toast } from "react-toastify";
 
 interface EditInvoiceModalProps {
   onClose: () => void;
@@ -51,9 +53,19 @@ export function EditInvoiceModal({
 
   async function handleSaveData(data: IInvoiceSchema) {
     try {
-      const response = await api.put("/invoices/" + id, data);
-      onSaveData();
-      // onClose();
+      const {
+        data: { success, message },
+      } = await api.put("/invoices/" + id, data);
+
+      if (success) {
+        console.log("save");
+        toast.success(message);
+        onSaveData();
+        onClose();
+      } else {
+        console.error(message);
+        toast.error(message);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -76,7 +88,10 @@ export function EditInvoiceModal({
           <Content>
             <h2>Edit Invoice</h2>
             <Form
-              initialData={invoiceData}
+              initialData={{
+                ...invoiceData,
+                createdAt: formatDateToUTCFormat(invoiceData.createdAt),
+              }}
               id="form-data"
               onSaveData={handleSaveData}
             />

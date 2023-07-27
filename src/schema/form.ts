@@ -81,7 +81,7 @@ export interface IInvoiceSchema {
     postCode: string;
     country: string;
   };
-  createdAt: Date;
+  createdAt: string;
   paymentTerms: "1" | "7" | "14" | "30";
   description: string;
   items: IInvoiceItem[];
