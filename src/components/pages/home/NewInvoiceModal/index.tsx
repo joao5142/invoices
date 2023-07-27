@@ -37,8 +37,10 @@ export function NewInvoiceModal({ onClose, onSaveData }: NewInvoiceModalProps) {
   async function handleSaveData(data: typeof validationSchema) {
     try {
       const response = await api.post("/invoices", data);
+
+      console.log("save");
       onSaveData();
-      onClose();
+      // onClose();
     } catch (err) {
       console.error(err);
     }
