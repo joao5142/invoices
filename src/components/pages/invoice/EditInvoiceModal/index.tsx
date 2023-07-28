@@ -53,6 +53,7 @@ export function EditInvoiceModal({
 
   async function handleSaveData(data: IInvoiceSchema) {
     try {
+      console.log(data);
       const {
         data: { success, message },
       } = await api.put("/invoices/" + id, data);

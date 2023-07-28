@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import { api } from "@/lib/axios";
 
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 interface DeleteInvoiceModalProps {
   onClose: () => void;
@@ -19,8 +20,18 @@ export function DeleteInvoiceModal({ onClose }: DeleteInvoiceModalProps) {
 
   async function handleDeleteInvoice() {
     try {
-      const response = await api.delete(`/invoices/${invoiceId}`);
-      router.replace("/");
+      const {
+        data: { success, message },
+      } = await api.delete(`/invoices/${invoiceId}`);
+
+      if (success) {
+        console.log("save");
+        toast.success(message);
+        router.replace("/");
+      } else {
+        console.error(message);
+        toast.error(message);
+      }
     } catch (err) {
       console.error(err);
     }
