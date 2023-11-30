@@ -58,7 +58,7 @@ export default function InvoiceItem() {
   const [invoice, setInvoice] = useState<IInvoiceDataFetch>({
     ...initialValues,
     status: "Pending",
-    createdAt: "15-02-2000",
+    createdAt: "15/02/2000",
   });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -193,7 +193,7 @@ export default function InvoiceItem() {
             <InvoiceColumnEmail>
               <span>Sent to</span>
               <strong>
-                <a href="mailto:{invoice?.author.email}">
+                <a href={`mailto:${invoice?.clientEmail}`}>
                   {invoice?.clientEmail}
                 </a>
               </strong>
