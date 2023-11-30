@@ -29,6 +29,7 @@ import { AnimatePresence } from "framer-motion";
 import { EditInvoiceModal } from "@/components/pages/invoice/EditInvoiceModal";
 import { FormSchemaType, IInvoiceSchema } from "@/schema/form";
 import { addDaysToDate, formatDate } from "@/utils/date";
+import { initialValues } from "../../schema/form";
 
 const pageVariants = {
   initial: {
@@ -45,7 +46,7 @@ const pageVariants = {
   },
 };
 
-export interface IInvoiceDataFetch extends Partial<IInvoiceSchema> {
+export interface IInvoiceDataFetch extends IInvoiceSchema {
   status?: StatusType;
 }
 
@@ -54,13 +55,20 @@ export default function InvoiceItem() {
 
   const { id } = router.query;
 
-  const [invoice, setInvoice] = useState<IInvoiceDataFetch>({});
+  const [invoice, setInvoice] = useState<IInvoiceDataFetch>({
+    ...initialValues,
+    status: "Pending",
+    createdAt: "15-02-2000",
+  });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const invoiceTotalPrice = invoice?.items?.reduce((acc, invoice) => {
-    return invoice.quantity * invoice.price + acc;
-  }, 0);
+  const invoiceTotalPrice =
+    invoice.items.length > 0
+      ? invoice.items.reduce((acc, invoice) => {
+          return invoice.quantity * invoice.price + acc;
+        }, 0)
+      : 0;
 
   async function fetchInvoice() {
     try {

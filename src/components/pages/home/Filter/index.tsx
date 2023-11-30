@@ -7,7 +7,7 @@ import {
   FilterText,
   Icon,
 } from "./styles";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import iconCheck from "@/assets/images/icon-check.svg";
 
@@ -21,7 +21,7 @@ export function Filter({ onDataChange }: FilterProps) {
   function handleToggleIcon() {
     setIsOpen(!isOpen);
   }
-  function handleChangeCheckboxValue(event: InputEvent) {
+  function handleChangeCheckboxValue(event: FormEvent<HTMLInputElement>) {
     let currentChangedData: string[] = [];
 
     if ((event.target as HTMLInputElement).checked) {
@@ -46,7 +46,8 @@ export function Filter({ onDataChange }: FilterProps) {
 
   useEffect(() => {
     let fn = (e: Event) => {
-      let isClickable = e.target?.closest("[data-content]") != null;
+      let isClickable =
+        (e.target as HTMLElement)?.closest("[data-content]") != null;
 
       if (!isClickable) {
         setIsOpen(false);
@@ -70,7 +71,7 @@ export function Filter({ onDataChange }: FilterProps) {
       <FilterContent isOpen={isOpen} data-content="content-text">
         <label>
           <input
-            onInput={handleChangeCheckboxValue}
+            onInput={(event) => handleChangeCheckboxValue(event)}
             type="checkbox"
             name="checkbox"
             value="Paid"

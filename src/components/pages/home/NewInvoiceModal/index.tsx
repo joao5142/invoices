@@ -29,13 +29,13 @@ const animation = {
 };
 
 export function NewInvoiceModal({ onClose, onSaveData }: NewInvoiceModalProps) {
-  function handleCloseModal(event: Event) {
+  function handleCloseModal(event: Event | any) {
     if (event.currentTarget == event.target) {
       onClose();
     }
   }
 
-  async function handleSaveData(data: typeof validationSchema) {
+  async function handleSaveData(data: typeof validationSchema | any) {
     try {
       const {
         data: { success, message },
