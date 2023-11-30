@@ -14,7 +14,7 @@ import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-import avatarImg from "@/assets/images/avatar.png";
+import avatarImg from "@/assets/images/avatar.PNG";
 
 export function Aside() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
