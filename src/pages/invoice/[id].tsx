@@ -105,6 +105,10 @@ export default function InvoiceItem() {
     }
   }, [id]);
 
+  if (router.isFallback) {
+    <h1>Is loading</h1>;
+  }
+
   return (
     <Main
       data-view="invoice-item"
