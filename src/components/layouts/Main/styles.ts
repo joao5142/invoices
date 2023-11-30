@@ -10,6 +10,26 @@ export const MainContainer = styled(motion.main)`
   padding: 4.5rem 3rem;
 
   margin-left: 6.5rem;
+
+  @media (max-width: 700px) {
+    & {
+      margin-top: 6rem;
+    }
+    & {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 500px) {
+    &:not([data-view="invoice-item"]) {
+      padding: 2.5rem 3rem;
+    }
+  }
+  @media (max-width: 450px) {
+    & {
+      padding: 2.5rem 0.6rem;
+    }
+  }
 `;
 
 export const ButtonNewInvoiceIcon = styled.div`

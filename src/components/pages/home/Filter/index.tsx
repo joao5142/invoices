@@ -11,12 +11,39 @@ import { useEffect, useState } from "react";
 
 import iconCheck from "@/assets/images/icon-check.svg";
 
-export function Filter() {
+interface FilterProps {
+  onDataChange: (data: string[]) => void;
+}
+export function Filter({ onDataChange }: FilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [checkedCheckboxs, setCheckedCheckboxs] = useState<string[]>([]);
 
   function handleToggleIcon() {
     setIsOpen(!isOpen);
   }
+  function handleChangeCheckboxValue(event: InputEvent) {
+    let currentChangedData: string[] = [];
+
+    if ((event.target as HTMLInputElement).checked) {
+      setCheckedCheckboxs((prevState) => {
+        currentChangedData = [
+          ...prevState,
+          (event.target as HTMLInputElement).value,
+        ];
+        onDataChange(currentChangedData);
+        return currentChangedData;
+      });
+    } else {
+      setCheckedCheckboxs((prevState) => {
+        currentChangedData = prevState.filter(
+          (value) => value != (event.target as HTMLInputElement).value
+        );
+        onDataChange(currentChangedData);
+        return currentChangedData;
+      });
+    }
+  }
+
   useEffect(() => {
     let fn = (e: Event) => {
       let isClickable = e.target?.closest("[data-content]") != null;
@@ -42,7 +69,12 @@ export function Filter() {
 
       <FilterContent isOpen={isOpen} data-content="content-text">
         <label>
-          <input type="checkbox" name="checkbox" />
+          <input
+            onInput={handleChangeCheckboxValue}
+            type="checkbox"
+            name="checkbox"
+            value="Paid"
+          />
           <CheckBox>
             <Image src={iconCheck} width={10} alt="" />
           </CheckBox>
@@ -50,19 +82,16 @@ export function Filter() {
         </label>
 
         <label>
-          <input type="checkbox" name="checkbox" />
+          <input
+            onInput={handleChangeCheckboxValue}
+            type="checkbox"
+            name="checkbox"
+            value="Pending"
+          />
           <CheckBox>
             <Image src={iconCheck} width={10} alt="" />
           </CheckBox>
           <span>Pending</span>
-        </label>
-
-        <label>
-          <input type="checkbox" name="checkbox" />
-          <CheckBox>
-            <Image src={iconCheck} width={10} alt="" />
-          </CheckBox>
-          <span>Draft</span>
         </label>
       </FilterContent>
     </FilterContainer>

@@ -25,7 +25,7 @@ export const FormContainer = styled.form`
     flex-direction: column;
     gap: 7px;
   }
-  label:has(input:invalid) span {
+  label:has(input[data-invalid]) span {
     color: rgb(236, 87, 87);
   }
   label input,
@@ -50,7 +50,7 @@ export const FormContainer = styled.form`
       font-weight: bold;
     }
 
-    &:invalid {
+    &[data-invalid] {
       border-color: #ec647d;
     }
 
@@ -60,11 +60,27 @@ export const FormContainer = styled.form`
   }
 
   label select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background: url(/assets/images/icon-arrow-down.svg) no-repeat;
+    background-size: 12px;
+    background-position: right 1.25rem center;
   }
   label span {
     font-size: 0.75rem;
 
     color: ${(props) => props.theme.color.text.formLabel};
+  }
+
+  label input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
+
+    background: url("/assets/images/icon-calendar.svg") no-repeat;
+
+    border-width: thin;
   }
 `;
 
@@ -150,4 +166,13 @@ export const Item = styled.div`
       fill: #ec5757;
     }
   }
+`;
+
+export const ErrorText = styled.span`
+  display: inline-block;
+  color: #ec647d;
+
+  font-size: 0.8rem;
+
+  margin-bottom: 0.8rem;
 `;
