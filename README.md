@@ -26,14 +26,7 @@
 <img margin-bottom="20px" src="/public/assets/readme2.png">
 <img margin-bottom="20px" src="/public/assets/readme3.png">
 
-<div>
-	<h4  style="display: inline_block">Visualização do site :</h4>
-	<a style="display: inline_block" target="blank" href="https://coffee-delivery-cfg7r9ntg-joao5142.vercel.app">
-			Preview no Vercel
-	</a>
-</div>
-
-<!-- <h4  style="display: inline_block">Visualização do site :</h4><a style="display: inline_block" target="blank" href="https://main--jaotictactoe.netlify.app/">Preview no Netlify</a> -->
+ 
 
 <h2>🧑🏻‍ Autor</h2>
 <p>Feito por João paulo</p>
