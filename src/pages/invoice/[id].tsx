@@ -63,12 +63,9 @@ export default function InvoiceItem() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const invoiceTotalPrice =
-    invoice.items.length > 0
-      ? invoice.items.reduce((acc, invoice) => {
-          return invoice.quantity * invoice.price + acc;
-        }, 0)
-      : 0;
+  const invoiceTotalPrice = Array.from(invoice.items).reduce((acc, invoice) => {
+    return invoice.quantity * invoice.price + acc;
+  }, 0);
 
   async function fetchInvoice() {
     try {
