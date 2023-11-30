@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/styles";
+import { ButtonContainer } from "@/components/ui/Button/styles";
 import styled, { css } from "styled-components";
 
 export const FormContainer = styled.form`
@@ -127,7 +127,7 @@ export const ItemsContainer = styled.div`
     color: ${(props) => props.theme.color.text.bodyB};
   }
 
-  ${Button} {
+  ${ButtonContainer} {
     width: 100%;
   }
 `;

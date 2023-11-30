@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useFieldArray } from "react-hook-form";
 
 import { validationSchema, IInvoiceSchema } from "@/schema/form";
+import * as Yup from "yup";
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   onSaveData: (data: IInvoiceSchema) => void;
@@ -34,7 +35,7 @@ export function Form({ onSaveData, initialData, ...rest }: FormProps) {
     control,
     watch,
   } = useForm<IInvoiceSchema>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver<IInvoiceSchema>(validationSchema),
     defaultValues: initialData,
   });
 

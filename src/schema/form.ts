@@ -38,7 +38,7 @@ export const validationSchema = Yup.object().shape({
     postCode: Yup.string().required("- All fields must be filled."),
     country: Yup.string().required("- All fields must be filled."),
   }),
-  createdAt: Yup.date().required("- All fields must be filled."),
+  createdAt: Yup.string().required("- All fields must be filled."),
   paymentTerms: Yup.string().required("- All fields must be filled."),
   description: Yup.string().required("- All fields must be filled."),
   items: Yup.array()
@@ -54,6 +54,7 @@ export const validationSchema = Yup.object().shape({
         total: Yup.number(),
       })
     )
+    .required()
     .min(1, "- An item must be added."),
 });
 
@@ -82,7 +83,7 @@ export interface IInvoiceSchema {
     country: string;
   };
   createdAt: string;
-  paymentTerms: "1" | "7" | "14" | "30";
+  paymentTerms: string;
   description: string;
-  items: IInvoiceItem[];
+  items: IInvoiceItem[] | [];
 }
